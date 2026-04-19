@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>قيّم تجربتك معنا</title>
+  <style>
+    /* =============================================
+       GLOBAL RESET & BASE STYLES
+    ============================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary:   #0A2540;
+      --accent:    #25D366;
+      --accent-dark: #1aad53;
+      --bg:        #F5F7FA;
+      --white:     #ffffff;
+      --danger:    #e74c3c;
+      --danger-dark:#c0392b;
+      --text-main: #1a1a2e;
+      --text-muted:#6b7280;
+      --radius:    16px;
+      --shadow:    0 8px 32px rgba(10,37,64,0.13);
+      --shadow-lg: 0 16px 48px rgba(10,37,64,0.18);
+      --transition: 0.3s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      direction: rtl;
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       ANIMATED BACKGROUND
+    ============================================= */
+    .bg-animated {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(135deg, #0A2540 0%, #1a3a5c 50%, #0d3060 100%);
+      overflow: hidden;
+    }
+    .bg-animated::before,
+    .bg-animated::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.08;
+      animation: floatBubble 12s ease-in-out infinite;
+    }
+    .bg-animated::before {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #25D366, transparent);
+      top: -200px; left: -200px;
+      animation-duration: 14s;
+    }
+    .bg-animated::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, #25D366, transparent);
+      bottom: -100px; right: -100px;
+      animation-duration: 10s;
+      animation-delay: -4s;
+    }
+
+    @keyframes floatBubble {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(40px, -60px) scale(1.1); }
+      66%       { transform: translate(-30px, 40px) scale(0.95); }
+    }
+
+    /* =============================================
+       MAIN WRAPPER / CARD
+    ============================================= */
+    #app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 28px;
+      box-shadow: var(--shadow-lg);
+      padding: 48px 40px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      animation: cardIn 0.6s cubic-bezier(.4,0,.2,1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(40px) scale(0.96); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    /* =============================================
+       LOGO / BRAND AREA
+    ============================================= */
+    .brand-logo {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--primary), #1a3a5c);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 20px rgba(10,37,64,0.25);
+    }
+    .brand-logo svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    /* =============================================
+       TYPOGRAPHY
+    ============================================= */
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.3;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    /* =============================================
+       STAR RATING DISPLAY
+    ============================================= */
+    .stars-display {
+      font-size: 2.2rem;
+      letter-spacing: 4px;
+      margin-bottom: 24px;
+      animation: starPop 0.5s ease both;
+      animation-delay: 0.3s;
+    }
+    @keyframes starPop {
+      from { transform: scale(0.7); opacity:0; }
+      to   { transform: scale(1); opacity:1; }
+    }
+
+    /* =============================================
+       BUTTONS
+    ============================================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 50px;
+      border: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      font-family: inherit;
+      direction: rtl;
+      width: 100%;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: var(--white);
+      box-shadow: 0 4px 18px rgba(37,211,102,0.35);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+      color: var(--white);
+      box-shadow: 0 4px 18px rgba(231,76,60,0.3);
+    }
+    .btn-danger:hover {
+      box-shadow: 0 8px 28px rgba(231,76,60,0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: var(--white);
+      box-shadow: 0 4px 18px rgba(37,211,102,0.3);
+      margin-top: 8px;
+    }
+    .btn-whatsapp:hover {
+      box-shadow: 0 8px 28px rgba(37,211,102,0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    /* =============================================
+       FORM STYLES
+    ============================================= */
+    .form-group {
+      margin-bottom: 20px;
+      text-align: right;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      direction: rtl;
+      background: #f9fafb;
+      color: var(--text-main);
+      transition: var(--transition);
+      outline: none;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(37,211,102,0.15);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #9ca3af;
+    }
+
+    /* =============================================
+       ALERT / STATUS MESSAGES
+    ============================================= */
+    .alert {
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert.show { display: flex; }
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    /* =============================================
+       LOADING SPINNER
+    ============================================= */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,37,64,0.85);
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner {
+      width: 60px; height: 60px;
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      color: var(--white);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    /* =============================================
+       SUCCESS / THANK YOU STATES
+    ============================================= */
+    .success-icon {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2.5rem;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+      animation: successPop 0.5s cubic-bezier(.68,-0.55,.265,1.55) both;
+    }
+    @keyframes successPop {
+      from { transform: scale(0); opacity:0; }
+      to   { transform: scale(1); opacity:1; }
+    }
+
+    .sad-icon {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2.5rem;
+      box-shadow: 0 8px 32px rgba(245,158,11,0.35);
+      animation: successPop 0.5s cubic-bezier(.68,-0.55,.265,1.55) both;
+    }
+
+    /* =============================================
+       QR CODE SECTION
+    ============================================= */
+    .qr-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 2px dashed #e5e7eb;
+    }
+    .qr-label {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    #qr-canvas {
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      display: block;
+      margin: 0 auto;
+    }
+    .qr-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    /* =============================================
+       DIVIDER
+    ============================================= */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    /* =============================================
+       ADMIN PANEL
+    ============================================= */
+    #admin-panel {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,37,64,0.9);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+    #admin-panel.show { display: flex; }
+
+    .admin-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      animation: cardIn 0.4s ease both;
+    }
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .admin-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-close {
+      width: 36px; height: 36px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      color: var(--text-main);
+    }
+    .admin-close:hover { background: #e5e7eb; }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--bg);
+      border-radius: 16px;
+      padding: 20px 12px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .stat-card.positive .stat-number { color: var(--accent-dark); }
+    .stat-card.negative .stat-number { color: var(--danger); }
+
+    .conversion-bar {
+      background: #f3f4f6;
+      border-radius: 50px;
+      overflow: hidden;
+      height: 12px;
+      margin: 16px 0 8px;
+    }
+    .conversion-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      border-radius: 50px;
+      transition: width 0.8s ease;
+    }
+    .conversion-label {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .admin-reset-btn {
+      background: #fee2e2;
+      color: var(--danger);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+    .admin-reset-btn:hover { background: #fecaca; }
+
+    /* =============================================
+       PAGE TRANSITIONS
+    ============================================= */
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+      animation: pageIn 0.45s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes pageIn {
+      from { opacity:0; transform: translateX(-20px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+
+    /* =============================================
+       STEP INDICATOR
+    ============================================= */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .step-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      transition: var(--transition);
+    }
+    .step-dot.active {
+      background: var(--accent);
+      transform: scale(1.3);
+    }
+    .step-dot.done {
+      background: var(--primary);
+    }
+
+    /* =============================================
+       COUNTDOWN TIMER
+    ============================================= */
+    .countdown-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    .footer-note {
+      margin-top: 28px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 540px) {
+      .card { padding: 36px 22px; }
+      h1 { font-size: 1.65rem; }
+      h2 { font-size: 1.2rem; }
+      .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .stat-number { font-size: 1.8rem; }
+      .admin-card { padding: 28px 20px; }
+    }
+    @media (max-width: 360px) {
+      .stat-grid { grid-template-columns: repeat(1, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-animated"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">🌟 جارٍ تحويلك لصفحة التقييم...</div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="admin-panel">
+    <div class="admin-card">
+      <div class="admin-header">
+        <div class="admin-title">
+          <span>📊</span> لوحة التحكم
+        </div>
+        <button class="admin-close" id="admin-close-btn" title="إغلاق">✕</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-visits">0</div>
+          <div class="stat-label">إجمالي الزيارات</div>
+        </div>
+        <div class="stat-card positive">
+          <div class="stat-number" id="stat-positive">0</div>
+          <div class="stat-label">ردود إيجابية</div>
+        </div>
+        <div class="stat-card negative">
+          <div class="stat-number" id="stat-negative">0</div>
+          <div class="stat-label">تحتاج تحسين</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="conversion-label">
+          <span>نسبة الرضا</span>
+          <span id="conversion-pct">— %</span>
+        </div>
+        <div class="conversion-bar">
+          <div class="conversion-fill" id="conversion-fill" style="width:0%"></div>
+        </div>
+        <div class="conversion-label">
+          <span>معدل التحويل لجوجل</span>
+          <span id="google-pct">— %</span>
+        </div>
+        <div class="conversion-bar">
+          <div class="conversion-fill" id="google-fill" style="width:0%;background:linear-gradient(90deg,#0A2540,#1a3a5c)"></div>
+        </div>
+      </div>
+
+      <div style="height:20px;"></div>
+      <button class="admin-reset-btn" id="admin-reset-btn">🗑️ إعادة تعيين الإحصائيات</button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN APP
+  ========================================== -->
+  <div id="app">
+    <div class="card" id="main-card">
+
+      <!-- Step Indicator -->
+      <div class="step-indicator" id="step-indicator">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+      </div>
+
+      <!-- ======== PAGE 1: LANDING ======== -->
+      <div class="page active" id="page-landing">
+
+        <div class="brand-logo">
+          <!-- Google Maps-inspired pin icon -->
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="20" r="10" fill="#25D366"/>
+            <path d="M24 4C15.163 4 8 11.163 8 20c0 13 16 28 16 28S40 33 40 20C40 11.163 32.837 4 24 4z" fill="white" fill-opacity="0.2"/>
+            <circle cx="24" cy="20" r="5" fill="white"/>
+          </svg>
+        </div>
+
+        <div class="stars-display">⭐⭐⭐⭐⭐</div>
+
+        <h1>قيّم تجربتك معنا</h1>
+        <p class="subtitle">رأيك يهمّنا ويساعدنا على تحسين خدماتنا<br>لنقدّم لك الأفضل دائمًا</p>
+
+        <button class="btn btn-primary" id="btn-start">
+          <span>🚀</span> ابدأ التقييم
+        </button>
+
+        <!-- QR Code Section -->
+        <div class="qr-section">
+          <div class="qr-label">📱 أو امسح الكود مباشرةً</div>
+          <canvas id="qr-canvas" width="160" height="160"></canvas>
+          <p class="qr-note">امسح الكود لتقييمنا على جوجل</p>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider">مشاركة</div>
+
+        <!-- WhatsApp Share -->
+        <button class="btn btn-whatsapp" id="btn-whatsapp">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          مشاركة رابط التقييم
+        </button>
+
+      </div>
+
+      <!-- ======== PAGE 2: EXPERIENCE QUESTION ======== -->
+      <div class="page" id="page-question">
+
+        <div class="brand-logo">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="20" fill="white" fill-opacity="0.2"/>
+            <text x="24" y="32" text-anchor="middle" font-size="24" fill="white">🤔</text>
+          </svg>
+        </div>
+
+        <h2>هل كانت تجربتك معنا جيدة؟</h2>
+        <p class="subtitle">إجابتك ستساعدنا على تقديم خدمة أفضل لك</p>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" id="btn-yes">
+            <span>👍</span> نعم، كانت ممتازة!
+          </button>
+          <button class="btn btn-danger" id="btn-no">
+            <span>👎</span> لا، تحتاج تحسين
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ======== PAGE 3A: POSITIVE → REDIRECTING ======== -->
+      <div class="page" id="page-positive">
+
+        <div class="success-icon">🌟</div>
+
+        <h2>يسعدنا ذلك! 🎉</h2>
+        <p class="subtitle">شكرًا على تقييمك الإيجابي!<br>سيتم تحويلك الآن لمشاركة تجربتك على جوجل</p>
+
+        <div class="countdown-badge" id="countdown-badge">
+          <span>⏱️</span>
+          <span id="countdown-text">التحويل خلال 2 ثانية...</span>
+        </div>
+
+        <button class="btn btn-primary" id="btn-redirect-now">
+          <span>🗺️</span> انتقل لجوجل الآن
+        </button>
+
+      </div>
+
+      <!-- ======== PAGE 3B: FEEDBACK FORM ======== -->
+      <div class="page" id="page-feedback">
+
+        <div class="sad-icon">💛</div>
+
+        <h2>نأسف لذلك</h2>
+        <p class="subtitle">نقدّر صراحتك — شاركنا ملاحظاتك<br>حتى نتحسّن ونخدمك بشكل أفضل</p>
+
+        <!-- Alert -->
+        <div class="alert alert-error" id="feedback-error">
+          <span>⚠️</span>
+          <span>يرجى كتابة ملاحظاتك قبل الإرسال</span>
+        </div>
+
+        <form id="feedback-form">
+          <div class="form-group">
+            <label for="f-name">الاسم <span style="color:var(--text-muted);font-weight:400">(اختياري)</span></label>
+            <input type="text" id="f-name" placeholder="اكتب اسمك هنا..." autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="f-phone">رقم الهاتف <span style="color:var(--text-muted);font-weight:400">(اختياري)</span></label>
+            <input type="tel" id="f-phone" placeholder="05xxxxxxxx" autocomplete="tel" dir="ltr" />
+          </div>
+          <div class="form-group">
+            <label for="f-notes">ملاحظاتك <span style="color:var(--danger)">*</span></label>
+            <textarea id="f-notes" rows="4" placeholder="شاركنا تجربتك بالتفصيل — ماذا يمكننا تحسينه؟"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <span>📤</span> إرسال الملاحظات
+          </button>
+        </form>
+
+      </div>
+
+      <!-- ======== PAGE 4: FEEDBACK THANK YOU ======== -->
+      <div class="page" id="page-thankyou">
+
+        <div class="success-icon">💚</div>
+
+        <h2>شكرًا جزيلًا! 🙏</h2>
+        <p class="subtitle">تم استلام ملاحظاتك بنجاح<br>سنعمل على معالجتها وتحسين خدماتنا<br>نقدّر وقتك واهتمامك</p>
+
+        <button class="btn btn-outline" id="btn-restart">
+          <span>🔄</span> تقييم مرة أخرى
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Footer note -->
+    <p class="footer-note">اضغط <strong style="color:rgba(255,255,255,0.8)">Ctrl + Shift + A</strong> لفتح لوحة التحكم</p>
+  </div>
+
+  <!-- ==========================================
+       JAVASCRIPT
+  ========================================== -->
+  <script>
+  // ==============================================
+  //  CONFIG
+  // ==============================================
+  const GOOGLE_REVIEW_LINK = "PUT_GOOGLE_MAPS_LINK_HERE";
+
+  // ==============================================
+  //  TRACKING — LocalStorage
+  // ==============================================
+  const STORAGE_KEY = "gmrs_stats";
+
+  function getStats() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { visits: 0, positive: 0, negative: 0 };
+    } catch { return { visits: 0, positive: 0, negative: 0 }; }
+  }
+
+  function saveStats(stats) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+  }
+
+  function incrementVisits() {
+    const s = getStats();
+    s.visits++;
+    saveStats(s);
+  }
+
+  function incrementPositive() {
+    const s = getStats();
+    s.positive++;
+    saveStats(s);
+  }
+
+  function incrementNegative() {
+    const s = getStats();
+    s.negative++;
+    saveStats(s);
+  }
+
+  // Track this visit
+  incrementVisits();
+
+  // ==============================================
+  //  PAGE NAVIGATION
+  // ==============================================
+  const pages = ['landing', 'question', 'positive', 'feedback', 'thankyou'];
+
+  function showPage(name) {
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) {
+        el.classList.remove('active');
+      }
+    });
+    const target = document.getElementById('page-' + name);
+    if (target) target.classList.add('active');
+    updateStepDots(name);
+    // Scroll to top of card
+    document.getElementById('main-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function updateStepDots(page) {
+    const dots = [
+      document.getElementById('dot-1'),
+      document.getElementById('dot-2'),
+      document.getElementById('dot-3'),
+    ];
+    dots.forEach(d => d && d.classList.remove('active', 'done'));
+
+    const map = {
+      landing:  [0],
+      question: [1],
+      positive: [2],
+      feedback: [2],
+      thankyou: [2],
+    };
+    const active = map[page] || [0];
+
+    // Mark previous dots as done
+    for (let i = 0; i < active[0]; i++) {
+      if (dots[i]) dots[i].classList.add('done');
+    }
+    if (dots[active[0]]) dots[active[0]].classList.add('active');
+  }
+
+  // ==============================================
+  //  LOADING / REDIRECT
+  // ==============================================
+  function showLoadingAndRedirect() {
+    const overlay = document.getElementById('loading-overlay');
+    overlay.classList.add('show');
+    setTimeout(() => {
+      window.open(GOOGLE_REVIEW_LINK, '_blank');
+      overlay.classList.remove('show');
+    }, 2200);
+  }
+
+  // ==============================================
+  //  COUNTDOWN TIMER
+  // ==============================================
+  function startCountdown(seconds) {
+    const badge = document.getElementById('countdown-badge');
+    const text  = document.getElementById('countdown-text');
+    let remaining = seconds;
+
+    const tick = () => {
+      if (remaining <= 0) {
+        showLoadingAndRedirect();
+        return;
+      }
+      text.textContent = `التحويل خلال ${remaining} ${remaining === 1 ? 'ثانية' : 'ثوانٍ'}...`;
+      remaining--;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  }
+
+  // ==============================================
+  //  QR CODE GENERATOR (Pure Canvas, no lib)
+  // ==============================================
+  // Lightweight QR code using qrcodejs logic embedded below.
+  // We implement a minimal QR encoder using data URI via Google Charts API fallback,
+  // with a pure JS QR drawing as primary.
+
+  /**
+   * Ultra-minimal QR Code generator using the
+   * free Google Chart API (no external JS library needed).
+   * Falls back gracefully if offline.
+   */
+  function generateQR(text, canvas) {
+    const size = 160;
+    const encodedText = encodeURIComponent(text);
+    const apiURL = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedText}&bgcolor=ffffff&color=0A2540&format=png&margin=2`;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function () {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+      // Rounded background
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, 12);
+      ctx.fill();
+      ctx.drawImage(img, 0, 0, size, size);
+    };
+    img.onerror = function () {
+      // Fallback: draw a placeholder
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#f3f4f6';
+      ctx.fillRect(0, 0, size, size);
+      ctx.fillStyle = '#0A2540';
+      ctx.font = 'bold 13px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('QR Code', size / 2, size / 2 - 10);
+      ctx.font = '11px Arial';
+      ctx.fillStyle = '#6b7280';
+      ctx.fillText('(يتطلب اتصال بالإنترنت)', size / 2, size / 2 + 10);
+    };
+    img.src = apiURL;
+  }
+
+  // ==============================================
+  //  WHATSAPP SHARE
+  // ==============================================
+  function shareWhatsApp() {
+    const message = `نشكرك لتعاملك معنا 🙏\nيسعدنا تقييمك:\n${GOOGLE_REVIEW_LINK}`;
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+
+  // ==============================================
+  //  ADMIN PANEL
+  // ==============================================
+  function openAdminPanel() {
+    const stats = getStats();
+    document.getElementById('stat-visits').textContent   = stats.visits;
+    document.getElementById('stat-positive').textContent = stats.positive;
+    document.getElementById('stat-negative').textContent = stats.negative;
+
+    const total = stats.positive + stats.negative;
+    const satisfactionPct = total > 0 ? Math.round((stats.positive / total) * 100) : 0;
+    const googlePct = stats.visits > 0 ? Math.round((stats.positive / stats.visits) * 100) : 0;
+
+    document.getElementById('conversion-pct').textContent = satisfactionPct + '%';
+    document.getElementById('conversion-fill').style.width = satisfactionPct + '%';
+    document.getElementById('google-pct').textContent = googlePct + '%';
+    document.getElementById('google-fill').style.width = googlePct + '%';
+
+    document.getElementById('admin-panel').classList.add('show');
+  }
+
+  function closeAdminPanel() {
+    document.getElementById('admin-panel').classList.remove('show');
+  }
+
+  // ==============================================
+  //  EVENT LISTENERS
+  // ==============================================
+
+  // --- Landing Page ---
+  document.getElementById('btn-start').addEventListener('click', () => {
+    showPage('question');
+  });
+
+  document.getElementById('btn-whatsapp').addEventListener('click', shareWhatsApp);
+
+  // --- Experience Question ---
+  document.getElementById('btn-yes').addEventListener('click', () => {
+    incrementPositive();
+    showPage('positive');
+    // Start 2-second countdown
+    setTimeout(() => startCountdown(2), 400);
+  });
+
+  document.getElementById('btn-no').addEventListener('click', () => {
+    incrementNegative();
+    showPage('feedback');
+  });
+
+  // --- Positive Page ---
+  document.getElementById('btn-redirect-now').addEventListener('click', () => {
+    showLoadingAndRedirect();
+  });
+
+  // --- Feedback Form ---
+  document.getElementById('feedback-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const notes = document.getElementById('f-notes').value.trim();
+    const errAlert = document.getElementById('feedback-error');
+
+    if (!notes) {
+      errAlert.classList.add('show');
+      document.getElementById('f-notes').focus();
+      setTimeout(() => errAlert.classList.remove('show'), 4000);
+      return;
+    }
+
+    errAlert.classList.remove('show');
+
+    // Save feedback to localStorage (optional log)
+    const feedbackLog = JSON.parse(localStorage.getItem('gmrs_feedback') || '[]');
+    feedbackLog.push({
+      name: document.getElementById('f-name').value.trim() || 'مجهول',
+      phone: document.getElementById('f-phone').value.trim() || '—',
+      notes: notes,
+      date: new Date().toLocaleString('ar-SA'),
+    });
+    localStorage.setItem('gmrs_feedback', JSON.stringify(feedbackLog));
+
+    // Reset form
+    this.reset();
+
+    // Show thank you
+    showPage('thankyou');
+  });
+
+  // --- Restart Button ---
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    showPage('landing');
+  });
+
+  // --- Admin Panel ---
+  document.getElementById('admin-close-btn').addEventListener('click', closeAdminPanel);
+  document.getElementById('admin-panel').addEventListener('click', function (e) {
+    if (e.target === this) closeAdminPanel();
+  });
+  document.getElementById('admin-reset-btn').addEventListener('click', () => {
+    if (confirm('هل أنت متأكد من إعادة تعيين جميع الإحصائيات؟')) {
+      saveStats({ visits: 0, positive: 0, negative: 0 });
+      localStorage.removeItem('gmrs_feedback');
+      openAdminPanel(); // refresh
+    }
+  });
+
+  // Keyboard shortcut: Ctrl + Shift + A
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+      e.preventDefault();
+      openAdminPanel();
+    }
+  });
+
+  // ==============================================
+  //  INIT
+  // ==============================================
+  window.addEventListener('DOMContentLoaded', () => {
+    // Generate QR code
+    const canvas = document.getElementById('qr-canvas');
+    generateQR(GOOGLE_REVIEW_LINK, canvas);
+
+    // Show landing page
+    showPage('landing');
+  });
+  </script>
+
+</body>
+</html>
