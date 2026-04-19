@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>قاعة ايلا للاحتفالات والمناسبات</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --primary: #6C63FF;
+    --primary-dark: #5a52d5;
+    --accent: #FFD700;
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.15);
+    --card-bg-light: rgba(255,255,255,0.95);
+    --card-bg-dark: rgba(30,30,50,0.85);
+    --text-light: #1a1a2e;
+    --text-dark: #f0f0ff;
+    --bg-light: linear-gradient(135deg,#f0f4ff 0%,#e8ecff 50%,#f5f0ff 100%);
+    --bg-dark: linear-gradient(135deg,#0f0c29 0%,#1a1a3e 50%,#0d0d1a 100%);
+    --shadow-light: 0 20px 60px rgba(108,99,255,0.15);
+    --shadow-dark: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    transition: all 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  body.light {
+    background: var(--bg-light);
+    color: var(--text-light);
+  }
+
+  body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  /* Animated Background Orbs */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 8s ease-in-out infinite;
+  }
+  .bg-orb-1 { width: 400px; height: 400px; background: #6C63FF; top: -100px; right: -100px; animation-delay: 0s; }
+  .bg-orb-2 { width: 300px; height: 300px; background: #FFD700; bottom: 100px; left: -80px; animation-delay: 3s; }
+  .bg-orb-3 { width: 250px; height: 250px; background: #FF6B9D; top: 50%; right: 30%; animation-delay: 5s; }
+
+  @keyframes floatOrb {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  /* Glass Card */
+  .glass-card {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+  }
+
+  body.light .glass-card {
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 8px 40px rgba(108,99,255,0.12), 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  body.dark .glass-card {
+    background: rgba(20,20,45,0.75);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+
+  /* Screens */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    animation: screenIn 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes screenIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Stars */
+  .star-filled { color: #FFB800; }
+  .star-empty { color: #d1d5db; }
+
+  /* Buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, #6C63FF, #9C88FF);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 32px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(108,99,255,0.5);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-success {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 32px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(17,153,142,0.35);
+  }
+  .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(17,153,142,0.5); }
+
+  .btn-outline {
+    background: transparent;
+    border-radius: 16px;
+    padding: 14px 32px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  body.light .btn-outline { border: 2px solid #6C63FF; color: #6C63FF; }
+  body.dark .btn-outline { border: 2px solid #9C88FF; color: #9C88FF; }
+  .btn-outline:hover { background: rgba(108,99,255,0.1); transform: translateY(-2px); }
+
+  /* Ripple Effect */
+  .ripple-container { position: relative; overflow: hidden; }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* Carousel */
+  .carousel-wrapper { position: relative; overflow: hidden; }
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    will-change: transform;
+  }
+  .carousel-card {
+    flex: 0 0 100%;
+    padding: 0 8px;
+  }
+  @media (min-width: 768px) {
+    .carousel-card { flex: 0 0 50%; }
+  }
+  @media (min-width: 1024px) {
+    .carousel-card { flex: 0 0 33.333%; }
+  }
+
+  .review-card {
+    border-radius: 20px;
+    padding: 24px;
+    height: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  body.light .review-card {
+    background: white;
+    box-shadow: 0 4px 24px rgba(108,99,255,0.08);
+    border: 1px solid rgba(108,99,255,0.08);
+  }
+  body.dark .review-card {
+    background: rgba(30,30,60,0.8);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .review-card::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 80px;
+    color: #6C63FF;
+    opacity: 0.12;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  /* Avatar */
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  /* Rating Bar */
+  .rating-bar-track {
+    height: 8px;
+    border-radius: 4px;
+    flex: 1;
+    overflow: hidden;
+  }
+  body.light .rating-bar-track { background: #f0f0f0; }
+  body.dark .rating-bar-track { background: rgba(255,255,255,0.1); }
+
+  .rating-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #FFB800, #FF8C00);
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* Toggle Switch */
+  .toggle-switch {
+    width: 52px;
+    height: 28px;
+    background: rgba(108,99,255,0.3);
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle-switch.active { background: #6C63FF; }
+  .toggle-switch::after {
+    content: '';
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.active::after { transform: translateX(-24px); }
+
+  /* Success Animation */
+  .success-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: successPop 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+    box-shadow: 0 10px 40px rgba(17,153,142,0.4);
+  }
+  @keyframes successPop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(108,99,255,0.2);
+    border-top-color: #6C63FF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Floating Particles */
+  .particle {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6C63FF;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 999;
+  }
+
+  /* Pulse Ring */
+  .pulse-ring {
+    animation: pulseRing 2s ease-out infinite;
+  }
+  @keyframes pulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(108,99,255,0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(108,99,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+  }
+
+  /* Textarea */
+  textarea, input[type="text"], input[type="email"] {
+    font-family: 'Cairo', sans-serif;
+    width: 100%;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s;
+    resize: vertical;
+  }
+  body.light textarea, body.light input[type="text"], body.light input[type="email"] {
+    background: #f8f9ff;
+    border: 2px solid #e8eaff;
+    color: #1a1a2e;
+  }
+  body.dark textarea, body.dark input[type="text"], body.dark input[type="email"] {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: #f0f0ff;
+  }
+  textarea:focus, input:focus {
+    border-color: #6C63FF;
+    box-shadow: 0 0 0 4px rgba(108,99,255,0.1);
+  }
+
+  /* Admin Panel */
+  #adminPanel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #adminPanel.open { display: flex; }
+
+  .admin-inner {
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 28px;
+    padding: 32px;
+  }
+  body.light .admin-inner {
+    background: white;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  }
+  body.dark .admin-inner {
+    background: #1a1a3e;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  /* Dot Indicators */
+  .dot-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  body.light .dot-indicator { background: #d1d5db; }
+  body.dark .dot-indicator { background: rgba(255,255,255,0.2); }
+  .dot-indicator.active { background: #6C63FF; width: 24px; border-radius: 4px; }
+
+  /* Arrow Buttons */
+  .arrow-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 18px;
+  }
+  body.light .arrow-btn { background: white; box-shadow: 0 4px 16px rgba(0,0,0,0.1); color: #6C63FF; }
+  body.dark .arrow-btn { background: rgba(255,255,255,0.1); color: #9C88FF; }
+  .arrow-btn:hover { transform: scale(1.1); }
+
+  /* Rating Option Buttons */
+  .rating-option {
+    border-radius: 20px;
+    padding: 20px 24px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rating-option:hover { transform: translateY(-4px); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.4); border-radius: 3px; }
+
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .badge-green { background: rgba(17,153,142,0.15); color: #11998e; }
+  .badge-purple { background: rgba(108,99,255,0.15); color: #6C63FF; }
+
+  /* Feedback Star Select */
+  .star-select { cursor: pointer; font-size: 32px; transition: transform 0.2s; }
+  .star-select:hover { transform: scale(1.2); }
+
+  /* Progress bar for redirect */
+  .redirect-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(108,99,255,0.2);
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .redirect-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6C63FF, #38ef7d);
+    border-radius: 2px;
+    width: 0%;
+    animation: fillBar 2s linear forwards;
+  }
+  @keyframes fillBar { to { width: 100%; } }
+
+  /* Confetti particles */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9998;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+  }
+
+  /* WhatsApp float */
+  .wa-float {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 100;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    animation: waPulse 2s ease-in-out infinite;
+  }
+  .wa-float:hover { transform: scale(1.1); }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 6px 24px rgba(37,211,102,0.45); }
+    50% { box-shadow: 0 6px 40px rgba(37,211,102,0.7); }
+  }
+
+  /* Step indicator */
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+
+  /* Modal overlay */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  /* QR section */
+  #qrcode canvas, #qrcode img { border-radius: 12px; }
+
+  /* Animations for cards */
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .slide-in { animation: slideInRight 0.4s ease forwards; }
+
+  /* Neon glow for dark mode */
+  body.dark .neon-text {
+    text-shadow: 0 0 20px rgba(108,99,255,0.5), 0 0 40px rgba(108,99,255,0.3);
+  }
+
+  /* Skeleton Loader */
+  .skeleton {
+    border-radius: 8px;
+    animation: shimmer 1.5s infinite;
+    background: linear-gradient(90deg, rgba(108,99,255,0.05) 25%, rgba(108,99,255,0.1) 50%, rgba(108,99,255,0.05) 75%);
+    background-size: 200% 100%;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .google-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  body.light .google-badge { background: #f8f9ff; border: 1px solid #e0e0ff; color: #555; }
+  body.dark .google-badge { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: #ccc; }
+</style>
+</head>
+<body class="light">
+
+<!-- Background Orbs -->
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<!-- WhatsApp Float -->
+<a class="wa-float" href="https://wa.me/966503424335?text=مرحباً، أود الاستفسار عن قاعة ايلا للاحتفالات والمناسبات" target="_blank" title="تواصل واتساب">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- ===== SCREEN 1: LANDING ===== -->
+<div class="screen active" id="screen1" style="flex-direction:column; align-items:center; padding: 20px;">
+  <div style="width:100%; max-width:860px; margin:0 auto;">
+
+    <!-- Top Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 0; margin-bottom:8px;">
+      <div class="google-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google Reviews
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:13px; opacity:0.6;" id="modeLabel">🌙 داكن</span>
+        <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+      </div>
+    </div>
+
+    <!-- Hero Card -->
+    <div class="glass-card" style="padding:40px 32px; text-align:center; margin-bottom:24px; position:relative; overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#6C63FF,#FFD700,#FF6B9D,#38ef7d);"></div>
+
+      <!-- Logo / Icon -->
+      <div style="width:90px;height:90px;border-radius:24px;background:linear-gradient(135deg,#6C63FF,#9C88FF);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(108,99,255,0.35);" class="pulse-ring">
+        <span style="font-size:42px;">🎉</span>
+      </div>
+
+      <h1 class="neon-text" style="font-size:clamp(22px,4vw,32px);font-weight:900;margin-bottom:8px;line-height:1.3;">
+        قاعة ايلا للاحتفالات والمناسبات
+      </h1>
+      <p style="opacity:0.6;font-size:15px;margin-bottom:28px;">اكتشف تجربة الاحتفالات الفاخرة</p>
+
+      <!-- Rating Display -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:28px;">
+        <div style="text-align:center;">
+          <div style="font-size:clamp(48px,8vw,72px);font-weight:900;line-height:1;background:linear-gradient(135deg,#FFB800,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="ratingNumber">4.6</div>
+          <div style="display:flex;gap:4px;justify-content:center;margin:6px 0;" id="mainStars"></div>
+          <div style="font-size:14px;opacity:0.6;" id="totalReviewsDisplay">233 تقييم</div>
+        </div>
+        <div style="width:1px;height:80px;background:rgba(108,99,255,0.2);"></div>
+        <div style="text-align:right;">
+          <div id="ratingBars" style="display:flex;flex-direction:column;gap:8px;min-width:200px;"></div>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <button class="btn-primary ripple-container" onclick="goToStep2()" style="font-size:18px;padding:16px 40px;width:100%;max-width:340px;">
+        ⭐ أضف تقييمك الآن
+      </button>
+      <p style="font-size:13px;opacity:0.5;margin-top:12px;">رأيك يهمنا ويساعدنا على التحسين</p>
+    </div>
+
+    <!-- Reviews Carousel -->
+    <div class="glass-card" style="padding:28px 24px; margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div>
+          <h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">💬 آراء العملاء</h2>
+          <p style="font-size:13px;opacity:0.5;">تقييمات حقيقية من Google Maps</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="arrow-btn" onclick="prevSlide()" id="prevBtn">&#10094;</button>
+          <button class="arrow-btn" onclick="nextSlide()" id="nextBtn">&#10095;</button>
+        </div>
+      </div>
+
+      <div class="carousel-wrapper" id="carouselWrapper">
+        <div class="carousel-track" id="carouselTrack"></div>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:20px;" id="dotsContainer"></div>
+    </div>
+
+    <!-- QR Code Section -->
+    <div class="glass-card" style="padding:28px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;">
+        <div>
+          <h3 style="font-size:18px;font-weight:800;margin-bottom:6px;">🔳 امسح QR للتقييم</h3>
+          <p style="font-size:14px;opacity:0.6;max-width:260px;">وجّه كاميرا هاتفك لمسح الرمز والانتقال مباشرة لصفحة التقييم</p>
+          <div style="margin-top:14px;">
+            <a href="https://maps.app.goo.gl/RGEFWk4ysCyBHXfk9" target="_blank" class="btn-outline" style="display:inline-block;text-decoration:none;font-size:14px;padding:10px 20px;">
+              🗺️ افتح في خرائط Google
+            </a>
+          </div>
+        </div>
+        <div style="background:white;padding:12px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+          <div id="qrcode"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;padding:20px 0;opacity:0.45;font-size:13px;">
+      صُمِّم بـ ❤️ لخدمة عملاء قاعة ايلا · جميع الحقوق محفوظة
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 2: QUESTION ===== -->
+<div class="screen" id="screen2" style="flex-direction:column; align-items:center; justify-content:center; padding:20px; min-height:100vh;">
+  <div style="width:100%;max-width:520px;">
+
+    <!-- Step indicator -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px;">
+      <div class="step-dot" style="background:#6C63FF;"></div>
+      <div style="height:2px;width:40px;background:rgba(108,99,255,0.3);"></div>
+      <div class="step-dot" style="background:rgba(108,99,255,0.4);"></div>
+      <div style="height:2px;width:40px;background:rgba(108,99,255,0.15);"></div>
+      <div class="step-dot" style="background:rgba(108,99,255,0.2);"></div>
+    </div>
+
+    <div class="glass-card" style="padding:40px 32px;text-align:center;">
+      <div style="font-size:56px;margin-bottom:16px;animation:successPop 0.5s ease;">🤔</div>
+      <h2 style="font-size:24px;font-weight:900;margin-bottom:10px;">كيف كانت تجربتك معنا؟</h2>
+      <p style="font-size:15px;opacity:0.6;margin-bottom:32px;">نسعد بمعرفة رأيك الصريح لنقدم لك الأفضل دائماً</p>
+
+      <div style="display:grid;gap:16px;">
+        <!-- Positive -->
+        <div class="rating-option ripple-container" id="positiveOption" onclick="handleRating('positive')" style="background:linear-gradient(135deg,rgba(17,153,142,0.1),rgba(56,239,125,0.1));border-color:rgba(17,153,142,0.3);">
+          <div style="font-size:40px;margin-bottom:8px;">🌟</div>
+          <div style="font-size:18px;font-weight:800;color:#11998e;margin-bottom:4px;">تجربة ممتازة</div>
+          <div style="font-size:13px;opacity:0.7;">رائع! سيتم توجيهك لتقييم Google</div>
+        </div>
+
+        <!-- Negative -->
+        <div class="rating-option ripple-container" id="negativeOption" onclick="handleRating('negative')" style="background:linear-gradient(135deg,rgba(255,107,107,0.1),rgba(255,159,67,0.1));border-color:rgba(255,107,107,0.3);">
+          <div style="font-size:40px;margin-bottom:8px;">💬</div>
+          <div style="font-size:18px;font-weight:800;color:#FF6B6B;margin-bottom:4px;">يمكن التحسين</div>
+          <div style="font-size:13px;opacity:0.7;">أخبرنا لنتطور ونخدمك بشكل أفضل</div>
+        </div>
+      </div>
+
+      <button onclick="goBack()" style="background:none;border:none;cursor:pointer;opacity:0.5;font-family:'Cairo',sans-serif;font-size:14px;margin-top:20px;padding:8px 16px;border-radius:8px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='0.5'">
+        ← العودة للصفحة الرئيسية
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3A: SUCCESS / REDIRECT ===== -->
+<div class="screen" id="screen3a" style="flex-direction:column;align-items:center;justify-content:center;padding:20px;min-height:100vh;">
+  <div style="width:100%;max-width:480px;">
+    <div class="glass-card" style="padding:48px 32px;text-align:center;">
+      <div style="display:flex;justify-content:center;margin-bottom:24px;">
+        <div class="success-circle">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+      <h2 style="font-size:26px;font-weight:900;margin-bottom:10px;color:#11998e;">شكراً لك! 🎉</h2>
+      <p style="font-size:16px;opacity:0.7;margin-bottom:8px;">سعداء بتجربتك الإيجابية</p>
+      <p style="font-size:14px;opacity:0.55;margin-bottom:24px;">جاري توجيهك إلى Google Maps لإضافة تقييمك...</p>
+      <div class="redirect-bar"><div class="redirect-fill" id="redirectFill"></div></div>
+      <div style="margin-top:20px;">
+        <a href="https://maps.app.goo.gl/RGEFWk4ysCyBHXfk9" target="_blank" class="btn-success" style="display:inline-block;text-decoration:none;padding:14px 32px;border-radius:16px;font-family:'Cairo',sans-serif;font-weight:700;font-size:16px;">
+          ⭐ اضغط هنا لكتابة تقييمك
+        </a>
+      </div>
+      <button onclick="resetApp()" style="background:none;border:none;cursor:pointer;opacity:0.4;font-family:'Cairo',sans-serif;font-size:13px;margin-top:16px;display:block;width:100%;">
+        العودة للصفحة الرئيسية
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCREEN 3B: FEEDBACK FORM ===== -->
+<div class="screen" id="screen3b" style="flex-direction:column;align-items:center;justify-content:center;padding:20px;min-height:100vh;">
+  <div style="width:100%;max-width:560px;">
+
+    <div class="glass-card" style="padding:40px 32px;">
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="font-size:48px;margin-bottom:12px;">📝</div>
+        <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;">شاركنا تجربتك</h2>
+        <p style="font-size:14px;opacity:0.6;">ملاحظاتك تساعدنا على تقديم خدمة أفضل</p>
+      </div>
+
+      <!-- Star Rating Selector -->
+      <div style="text-align:center;margin-bottom:24px;">
+        <p style="font-size:15px;font-weight:600;margin-bottom:12px;">تقييمك العام</p>
+        <div id="starSelector" style="display:flex;justify-content:center;gap:8px;flex-direction:row-reverse;"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <label style="font-size:14px;font-weight:600;opacity:0.8;display:block;margin-bottom:8px;">الاسم (اختياري)</label>
+          <input type="text" id="feedbackName" placeholder="أدخل اسمك..." />
+        </div>
+        <div>
+          <label style="font-size:14px;font-weight:600;opacity:0.8;display:block;margin-bottom:8px;">تفاصيل ملاحظتك *</label>
+          <textarea id="feedbackText" rows="4" placeholder="أخبرنا بتفاصيل تجربتك..."></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <button class="btn-primary ripple-container" onclick="submitFeedback()" style="font-size:15px;">
+            📤 إرسال عبر واتساب
+          </button>
+          <button class="btn-outline ripple-container" onclick="resetApp()" style="font-size:15px;">
+            ← رجوع
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thank you after submit -->
+    <div id="feedbackThankYou" style="display:none;margin-top:16px;">
+      <div class="glass-card" style="padding:28px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:8px;">✅</div>
+        <p style="font-weight:700;font-size:16px;">تم إرسال ملاحظتك بنجاح!</p>
+        <p style="font-size:14px;opacity:0.6;margin-top:6px;">سنتواصل معك قريباً</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel">
+  <div class="admin-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+      <div>
+        <h2 style="font-size:22px;font-weight:900;">⚙️ لوحة الإدارة</h2>
+        <p style="font-size:13px;opacity:0.5;margin-top:4px;">Ctrl + Shift + A للفتح والإغلاق</p>
+      </div>
+      <button onclick="closeAdmin()" style="background:rgba(255,0,0,0.1);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;color:#ff6b6b;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,0,0,0.2)'" onmouseout="this.style.background='rgba(255,0,0,0.1)'">✕</button>
+    </div>
+
+    <!-- Stats Row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+      <div style="padding:16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(156,136,255,0.1));border:1px solid rgba(108,99,255,0.2);">
+        <div style="font-size:24px;font-weight:900;color:#6C63FF;" id="adminRating">4.6</div>
+        <div style="font-size:12px;opacity:0.6;margin-top:4px;">التقييم</div>
+      </div>
+      <div style="padding:16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,rgba(17,153,142,0.15),rgba(56,239,125,0.1));border:1px solid rgba(17,153,142,0.2);">
+        <div style="font-size:24px;font-weight:900;color:#11998e;" id="adminReviews">233</div>
+        <div style="font-size:12px;opacity:0.6;margin-top:4px;">التقييمات</div>
+      </div>
+      <div style="padding:16px;border-radius:16px;text-align:center;background:linear-gradient(135deg,rgba(255,107,107,0.15),rgba(255,159,67,0.1));border:1px solid rgba(255,107,107,0.2);">
+        <div style="font-size:24px;font-weight:900;color:#FF6B6B;" id="adminCards">4</div>
+        <div style="font-size:12px;opacity:0.6;margin-top:4px;">البطاقات</div>
+      </div>
+    </div>
+
+    <!-- Edit Rating & Total -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div>
+        <label style="font-size:13px;font-weight:600;opacity:0.7;display:block;margin-bottom:8px;">التقييم العام</label>
+        <input type="text" id="editRating" placeholder="4.8" />
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:600;opacity:0.7;display:block;margin-bottom:8px;">عدد التقييمات</label>
+        <input type="text" id="editTotalReviews" placeholder="128" />
+      </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <label style="font-size:14px;font-weight:700;">بطاقات التقييمات</label>
+        <button onclick="addReview()" style="background:linear-gradient(135deg,#6C63FF,#9C88FF);color:white;border:none;border-radius:10px;padding:8px 16px;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">+ إضافة بطاقة</button>
+      </div>
+      <div id="adminReviewsList" style="display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:12px;">
+      <button class="btn-primary" onclick="saveAdmin()" style="flex:1;font-size:15px;">💾 حفظ التغييرات</button>
+      <button class="btn-outline" onclick="closeAdmin()" style="flex:1;font-size:15px;">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================
+// DATA SYSTEM
+// ============================
+const PLACE_DATA = {
+  rating: 4.6,
+  totalReviews: 233,
+  reviews: [
+    { name: "عبدالله ال ثابت", rating: 5, text: "قاعة جميلة جداً والشباب اللي يشتغلون في الاستراحة ابطال ومتعاونين وشغلهم جميل في القهوة والشاهي .. ومحمد المصري والله يستاهل اكثر من 5 نجوم على تعاونه وادبه ومساعدته الى اخر لحظه تواجدنا فيها في القاعة .. كل التوفيق لكم👌" },
+    { name: "سارة العتيبي", rating: 5, text: "تنظيم فوق الممتاز وأنصح فيه بشدة" },
+    { name: "أحمد الشمري", rating: 5, text: "تجربة جميلة جداً وتعامل راقي" },
+    { name: "نورة القحطاني", rating: 5, text: "أفضل قاعة تعاملت معها بصراحة" }
+  ]
+};
+
+// Working copy
+let appData = JSON.parse(JSON.stringify(PLACE_DATA));
+
+// ============================
+// THEME SYSTEM
+// ============================
+let isDark = false;
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.className = isDark ? 'dark' : 'light';
+  document.getElementById('modeLabel').textContent = isDark ? '☀️ فاتح' : '🌙 داكن';
+  const toggle = document.getElementById('themeToggle');
+  toggle.classList.toggle('active', isDark);
+  renderAll();
+}
+
+// ============================
+// SCREEN NAVIGATION
+// ============================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  target.style.display = 'flex';
+  requestAnimationFrame(() => target.classList.add('active'));
+}
+
+function goToStep2() {
+  showScreen('screen2');
+}
+
+function goBack() {
+  showScreen('screen1');
+}
+
+function resetApp() {
+  document.getElementById('feedbackThankYou').style.display = 'none';
+  document.getElementById('feedbackText').value = '';
+  document.getElementById('feedbackName').value = '';
+  selectedFeedbackStar = 0;
+  renderStarSelector();
+  showScreen('screen1');
+}
+
+// ============================
+// RATING LOGIC
+// ============================
+function handleRating(type) {
+  if (type === 'positive') {
+    showScreen('screen3a');
+    // Confetti!
+    launchConfetti();
+    // Reset redirect bar animation
+    const fill = document.getElementById('redirectFill');
+    if (fill) { fill.style.animation = 'none'; fill.offsetHeight; fill.style.animation = 'fillBar 2s linear forwards'; }
+    // Auto redirect after 2.5s
+    setTimeout(() => {
+      window.open('https://maps.app.goo.gl/RGEFWk4ysCyBHXfk9', '_blank');
+    }, 2500);
+  } else {
+    showScreen('screen3b');
+    renderStarSelector();
+  }
+}
+
+// ============================
+// STAR HELPERS
+// ============================
+function renderStars(container, rating, size = '20px') {
+  container.innerHTML = '';
+  for (let i = 1; i <= 5; i++) {
+    const s = document.createElement('span');
+    s.textContent = '★';
+    s.style.fontSize = size;
+    s.style.color = i <= rating ? '#FFB800' : '#d1d5db';
+    container.appendChild(s);
+  }
+}
+
+function renderMainStars() {
+  const c = document.getElementById('mainStars');
+  if (!c) return;
+  c.innerHTML = '';
+  const r = parseFloat(appData.rating);
+  for (let i = 1; i <= 5; i++) {
+    const s = document.createElement('span');
+    s.style.fontSize = '28px';
+    if (i <= Math.floor(r)) {
+      s.textContent = '★'; s.style.color = '#FFB800';
+    } else if (i === Math.ceil(r) && r % 1 >= 0.5) {
+      s.textContent = '⯨'; s.style.color = '#FFB800';
+    } else {
+      s.textContent = '★'; s.style.color = '#d1d5db';
+    }
+    c.appendChild(s);
+  }
+}
+
+// ============================
+// RATING BARS
+// ============================
+function renderRatingBars() {
+  const c = document.getElementById('ratingBars');
+  if (!c) return;
+  c.innerHTML = '';
+  const levels = [
+    { label: '5 ★', pct: 88, color: '#4CAF50' },
+    { label: '4 ★', pct: 8,  color: '#8BC34A' },
+    { label: '3 ★', pct: 2,  color: '#FFC107' },
+    { label: '2 ★', pct: 1,  color: '#FF9800' },
+    { label: '1 ★', pct: 1,  color: '#f44336' },
+  ];
+  levels.forEach(lv => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;';
+    row.innerHTML = `
+      <span style="font-size:12px;font-weight:600;opacity:0.7;min-width:28px;">${lv.label}</span>
+      <div class="rating-bar-track" style="width:140px;">
+        <div class="rating-bar-fill" style="width:0%;background:${lv.color};" data-pct="${lv.pct}"></div>
+      </div>
+      <span style="font-size:11px;opacity:0.5;min-width:30px;">${lv.pct}%</span>`;
+    c.appendChild(row);
+    setTimeout(() => {
+      row.querySelector('.rating-bar-fill').style.width = lv.pct + '%';
+    }, 200);
+  });
+}
+
+// ============================
+// CAROUSEL
+// ============================
+let carouselIndex = 0;
+let carouselTimer;
+let cardsPerView = 1;
+
+function getCardsPerView() {
+  const w = window.innerWidth;
+  if (w >= 1024) return 3;
+  if (w >= 768) return 2;
+  return 1;
+}
+
+const avatarColors = ['#6C63FF','#FF6B9D','#11998e','#FF8C00','#4285F4','#E91E63'];
+
+function renderCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const dots = document.getElementById('dotsContainer');
+  if (!track || !dots) return;
+  track.innerHTML = '';
+  dots.innerHTML = '';
+  cardsPerView = getCardsPerView();
+  const total = appData.reviews.length;
+
+  appData.reviews.forEach((rev, idx) => {
+    const card = document.createElement('div');
+    card.className = 'carousel-card';
+    const color = avatarColors[idx % avatarColors.length];
+    const initial = rev.name ? rev.name[0] : '?';
+    const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+    card.innerHTML = `
+      <div class="review-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="avatar" style="background:${color};">${initial}</div>
+          <div>
+            <div style="font-weight:700;font-size:15px;">${rev.name}</div>
+            <div style="font-size:11px;opacity:0.5;margin-top:1px;">مراجع موثق</div>
+          </div>
+          <div style="margin-right:auto;">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          </div>
+        </div>
+        <div style="color:#FFB800;font-size:18px;margin-bottom:10px;letter-spacing:2px;">${stars}</div>
+        <p style="font-size:15px;line-height:1.7;opacity:0.85;">${rev.text}</p>
+      </div>`;
+    track.appendChild(card);
+  });
+
+  const totalSlides = Math.ceil(total / cardsPerView);
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot-indicator' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dots.appendChild(dot);
+  }
+
+  carouselIndex = 0;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const wrapper = document.getElementById('carouselWrapper');
+  if (!track || !wrapper) return;
+  cardsPerView = getCardsPerView();
+  const pct = (100 / cardsPerView) * carouselIndex;
+  track.style.transform = `translateX(${pct}%)`;
+  updateDots();
+}
+
+function updateDots() {
+  const dots = document.querySelectorAll('.dot-indicator');
+  const total = Math.ceil(appData.reviews.length / cardsPerView);
+  dots.forEach((d, i) => d.classList.toggle('active', i === Math.floor(carouselIndex / cardsPerView)));
+}
+
+function nextSlide() {
+  carouselIndex = (carouselIndex + cardsPerView) % appData.reviews.length;
+  updateCarousel();
+  resetTimer();
+}
+
+function prevSlide() {
+  carouselIndex = (carouselIndex - cardsPerView + appData.reviews.length) % appData.reviews.length;
+  updateCarousel();
+  resetTimer();
+}
+
+function goToSlide(idx) {
+  carouselIndex = idx * cardsPerView;
+  updateCarousel();
+  resetTimer();
+}
+
+function startTimer() {
+  carouselTimer = setInterval(nextSlide, 3000);
+}
+
+function resetTimer() {
+  clearInterval(carouselTimer);
+  startTimer();
+}
+
+// ============================
+// STAR SELECTOR (Feedback)
+// ============================
+let selectedFeedbackStar = 0;
+
+function renderStarSelector() {
+  const c = document.getElementById('starSelector');
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i = 5; i >= 1; i--) {
+    const s = document.createElement('span');
+    s.className = 'star-select';
+    s.textContent = '★';
+    s.style.color = i <= selectedFeedbackStar ? '#FFB800' : '#d1d5db';
+    s.onclick = () => { selectedFeedbackStar = i; renderStarSelector(); };
+    s.onmouseover = () => {
+      c.querySelectorAll('.star-select').forEach((st, idx) => {
+        st.style.color = (5 - idx) <= i ? '#FFB800' : '#d1d5db';
+      });
+    };
+    s.onmouseout = () => renderStarSelector();
+    c.appendChild(s);
+  }
+}
+
+// ============================
+// SUBMIT FEEDBACK (WhatsApp)
+// ============================
+function submitFeedback() {
+  const name = document.getElementById('feedbackName').value.trim();
+  const text = document.getElementById('feedbackText').value.trim();
+  if (!text) { alert('يرجى كتابة ملاحظتك أولاً'); return; }
+  const stars = '⭐'.repeat(selectedFeedbackStar || 1);
+  const msg = `مرحباً، هذا تقييم من ${name || 'أحد العملاء'}\n\nالتقييم: ${stars}\n\nالملاحظة:\n${text}\n\n— من نظام تقييمات قاعة ايلا`;
+  window.open(`https://wa.me/966503424335?text=${encodeURIComponent(msg)}`, '_blank');
+  document.getElementById('feedbackThankYou').style.display = 'block';
+}
+
+// ============================
+// QR CODE
+// ============================
+function generateQR() {
+  const el = document.getElementById('qrcode');
+  if (!el) return;
+  el.innerHTML = '';
+  new QRCode(el, {
+    text: 'https://maps.app.goo.gl/RGEFWk4ysCyBHXfk9',
+    width: 140,
+    height: 140,
+    colorDark: '#6C63FF',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+// ============================
+// CONFETTI
+// ============================
+function launchConfetti() {
+  const colors = ['#6C63FF','#FFD700','#FF6B9D','#38ef7d','#4285F4','#FF8C00'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.cssText = `
+        left:${Math.random()*100}vw;
+        top:-10px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        width:${6+Math.random()*8}px;
+        height:${6+Math.random()*8}px;
+        border-radius:${Math.random()>0.5?'50%':'2px'};
+        animation-duration:${1.5+Math.random()*2}s;
+        animation-delay:${Math.random()*0.5}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 3000);
+    }, i * 30);
+  }
+}
+
+// ============================
+// RIPPLE EFFECT
+// ============================
+document.addEventListener('click', function(e) {
+  const target = e.target.closest('.ripple-container');
+  if (!target) return;
+  const rect = target.getBoundingClientRect();
+  const ripple = document.createElement('div');
+  ripple.className = 'ripple';
+  const size = Math.max(rect.width, rect.height);
+  ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+  target.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 700);
+});
+
+// ============================
+// ADMIN PANEL
+// ============================
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+    e.preventDefault();
+    toggleAdmin();
+  }
+});
+
+function toggleAdmin() {
+  const panel = document.getElementById('adminPanel');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) closeAdmin(); else openAdmin();
+}
+
+function openAdmin() {
+  const panel = document.getElementById('adminPanel');
+  panel.classList.add('open');
+  document.getElementById('editRating').value = appData.rating;
+  document.getElementById('editTotalReviews').value = appData.totalReviews;
+  document.getElementById('adminRating').textContent = appData.rating;
+  document.getElementById('adminReviews').textContent = appData.totalReviews;
+  document.getElementById('adminCards').textContent = appData.reviews.length;
+  renderAdminReviews();
+}
+
+function closeAdmin() {
+  document.getElementById('adminPanel').classList.remove('open');
+}
+
+function renderAdminReviews() {
+  const list = document.getElementById('adminReviewsList');
+  list.innerHTML = '';
+  appData.reviews.forEach((rev, idx) => {
+    const row = document.createElement('div');
+    row.style.cssText = `border-radius:14px;padding:16px;border:1px solid rgba(108,99,255,0.2);`;
+    row.style.background = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(108,99,255,0.03)';
+    row.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <span style="font-size:13px;font-weight:700;opacity:0.6;">بطاقة #${idx+1}</span>
+        <button onclick="removeReview(${idx})" style="background:rgba(255,0,0,0.1);border:none;border-radius:8px;padding:4px 10px;font-size:12px;color:#ff6b6b;cursor:pointer;font-family:'Cairo',sans-serif;">حذف</button>
+      </div>
+      <div style="display:grid;gap:8px;">
+        <input type="text" value="${rev.name}" onchange="appData.reviews[${idx}].name=this.value" placeholder="الاسم" style="font-size:14px;" />
+        <input type="text" value="${rev.rating}" onchange="appData.reviews[${idx}].rating=parseInt(this.value)||5" placeholder="التقييم (1-5)" style="font-size:14px;" />
+        <textarea rows="2" onchange="appData.reviews[${idx}].text=this.value" placeholder="نص التقييم" style="font-size:14px;">${rev.text}</textarea>
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function addReview() {
+  appData.reviews.push({ name: "اسم العميل", rating: 5, text: "تقييم ممتاز 🌟" });
+  renderAdminReviews();
+  document.getElementById('adminCards').textContent = appData.reviews.length;
+}
+
+function removeReview(idx) {
+  appData.reviews.splice(idx, 1);
+  renderAdminReviews();
+  document.getElementById('adminCards').textContent = appData.reviews.length;
+}
+
+function saveAdmin() {
+  const r = parseFloat(document.getElementById('editRating').value);
+  const t = parseInt(document.getElementById('editTotalReviews').value);
+  if (!isNaN(r)) appData.rating = r;
+  if (!isNaN(t)) appData.totalReviews = t;
+  closeAdmin();
+  renderAll();
+}
+
+// ============================
+// RENDER ALL
+// ============================
+function renderAll() {
+  document.getElementById('ratingNumber').textContent = appData.rating;
+  document.getElementById('totalReviewsDisplay').textContent = appData.totalReviews + ' تقييم';
+  renderMainStars();
+  renderRatingBars();
+  renderCarousel();
+  startTimer();
+}
+
+// ============================
+// RESPONSIVE CAROUSEL RESIZE
+// ============================
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => { renderCarousel(); startTimer(); }, 200);
+});
+
+// ============================
+// INIT
+// ============================
+window.addEventListener('load', () => {
+  // Set all screens hidden except screen1
+  document.querySelectorAll('.screen').forEach(s => { s.style.display = 'none'; });
+  const s1 = document.getElementById('screen1');
+  s1.style.display = 'flex';
+  s1.classList.add('active');
+
+  renderAll();
+  generateQR();
+});
+</script>
+</body>
+</html>
